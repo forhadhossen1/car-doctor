@@ -1,29 +1,39 @@
 import { Link } from "react-router-dom";
 import img from '../../assets/images/login/login.svg';
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
 
 const SignUp = () => {
 
-    const handleSignUp = e =>{
+    const {createUser} = useContext(AuthContext)
+
+    const handleSignUp = e => {
         e.preventDefault();
         const form = e.target;
         const name = form.name.value;
         const email = form.email.value;
         const password = form.password.value;
-        const login = {name, email, password};
-        console.log(login);
+        const signUp = { name, email, password };
+        console.log(signUp);
+        
+        createUser(email, password)
+        .then(result => {
+            console.log(result.user)
+        })
+        .then(error => console.log(error))
     }
-    
+
 
     return (
         <div className="hero min-h-[70vh] bg-base-300">
             <div className="hero-content flex-col md:flex-row">
                 <div className="w-1/2 lg:mr-72">
-                    
+
                     <img src={img} alt="img" />
                 </div>
                 <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                     <form onSubmit={handleSignUp} className="card-body">
-                    <h1 className="text-5xl font-bold text-center">Sign UP</h1>
+                        <h1 className="text-5xl font-bold text-center">Sign UP</h1>
                         <div className="form-control">
                             <label className="label">
                                 <span className="label-text">Name</span>
@@ -47,7 +57,7 @@ const SignUp = () => {
                         </div>
                         <p>Alredy have an account <Link to='/login'><button className="btn btn-link">Login</button></Link> </p>
                     </form>
-                    
+
                 </div>
             </div>
         </div>
