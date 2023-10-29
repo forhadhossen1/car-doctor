@@ -1,11 +1,30 @@
 import { Link } from "react-router-dom";
 import logo from '../../../assets/logo.svg'
+import { useContext } from "react";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import { getAuth } from "firebase/auth";
+import app from "../../../firebase.config";
+const auth = getAuth(app);
+
 
 const Header = () => {
+
+    const { user, logOut } = useContext(AuthContext);
+
+    const handleLogOut = () => {
+        logOut(auth)
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => {
+                console.error(error)
+            })
+    }
+
     const navLink = <>
         <li><Link to='/'>Home</Link></li>
-        <li><Link to= '/about'>About</Link></li>
-        <li><Link to= '/login'>Login</Link></li>
+        <li><Link to='/about'>About</Link></li>
+        <li><Link to='/login'>Login</Link></li>
     </>
     return (
         <div className="navbar bg-base-100">
@@ -30,6 +49,11 @@ const Header = () => {
             <div className="navbar-end">
                 <button className="btn btn-outline btn-secondary">Appointment</button>
             </div>
+            {
+                user ? <button onClick={handleLogOut} className="btn px-6 py-0 bg-orange-700 border-none">Log Out</button>
+                    :
+                    <Link to='/login' className="btn px-6 py-0 bg-orange-700 border-none">Login</Link>
+            }
         </div>
     );
 };
